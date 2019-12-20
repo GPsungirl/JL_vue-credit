@@ -1,47 +1,35 @@
 <template>
-    <!-- 贝壳收益 页面 -->
+    <!-- 业务人员 页面 -->
     <div class="pad_5">
         <!-- M1 查询区域 -->
         <div class="query_fields pad_b_no handle_timerange">
             <el-form :inline="true" :model="queryForm" ref="queryForm" size="mini" class="demo-form-inline">
-                <!-- 收益类型 -->
-                <el-form-item label="收益类型" prop="virtual_class" label-width="68px">
-                    <el-select v-model="queryForm.virtual_class" placeholder="请选择收益类型" class="wid_140">
+                <!-- 客户类型 -->
+                <!-- <el-form-item label="客户类型" prop="user_type" label-width="68px">
+                    <el-select v-model="queryForm.user_type" placeholder="请选择客户类型" class="wid_140">
                     <el-option
-                        v-for="(item, index) of queryForm.virtual_classs"
+                        v-for="(item, index) of queryForm.user_types"
                         :key="index"
                         :label="item.value"
                         :value="item.id"
                         >
                     </el-option>
                     </el-select>
+                </el-form-item> -->
+                <!-- 用户名-->
+                <el-form-item label="用户名" prop="user_name" label-width="68px">
+                    <el-input v-model="queryForm.user_name" placeholder="请输入用户名" class="wid_140"></el-input>
                 </el-form-item>
-                <!-- 用户ID virtualSourceCustomid-->
-                <el-form-item label="用户ID" prop="virtualSourceCustomid" label-width="68px">
-                    <el-input v-model="queryForm.virtualSourceCustomid" placeholder="请输入用户ID" class="wid_140"></el-input>
-                </el-form-item>
-                <!-- 用户昵称 -->
-                <el-form-item label="用户昵称" prop="nickName" label-width="68px">
-                  <el-input v-model="queryForm.nickName" placeholder="请输入用户昵称" class="wid_140"></el-input>
-                </el-form-item>
-
-
-                <!-- 出行时间 -->
-                <el-form-item label="收益时间" prop="allTime">
-                    <el-date-picker
-                        v-model="queryForm.allTime"
-                        type="daterange"
-                        value-format="yyyy-MM-dd"
-                        range-separator="至"
-                        start-placeholder="开始时间"
-                        end-placeholder="结束时间">
-                    </el-date-picker>
+                <!-- 手机号 -->
+                <el-form-item label="手机号" prop="phone" label-width="68px">
+                  <el-input v-model="queryForm.phone" placeholder="请输入手机号" class="wid_140"></el-input>
                 </el-form-item>
                 <!-- 查询 -->
                 <el-form-item>
                     <el-button type="primary" size='mini' @click="queryData">查询</el-button>
                     <el-button type="success" size='mini' @click="resetData('queryForm')">重置</el-button>
                     <el-button type="primary" size='mini' @click="handle_refresh">刷新</el-button>
+                    <el-button type="success" size='mini' @click="handle_add">新增业务人员</el-button>
 
                 </el-form-item>
             </el-form>
@@ -50,28 +38,19 @@
         <div>
             <!-- 表格 -->
             <el-table :data="tableData" v-loading="tableLoading" border stripe style="width: 100%">
-                <el-table-column prop="" label="收益类型" width="" >
-                    <!-- 收益类型1礼物 2红包 -->
-                    <template slot-scope="scope">
-                        <span v-if="scope.row.virtual_class == 1">礼物</span>
-                        <span v-else-if="scope.row.virtual_class == 2">红包</span>
-                    </template>
+
+                <el-table-column prop="user_name" label="名称" width="">
                 </el-table-column>
-                <el-table-column prop="virtual_name" label="订单信息" width="">
+                <el-table-column prop="phone" label="电话" width="">
                 </el-table-column>
-                <el-table-column prop="virtual_gift_price" label="礼物单价(贝壳)" width="">
+                <!-- 上级ID -->
+                <el-table-column prop="up_userid" label="上级ID" width="">
                 </el-table-column>
-                <el-table-column prop="virtual_gift_num" label="礼物数量" width="">
-                </el-table-column>
-                <el-table-column prop="totalPrice" label="总价(贝壳)" width="">
-                </el-table-column>
-                <el-table-column prop="virtualSourceCustomid" label="用户ID" width="">
-                </el-table-column>
-                <el-table-column prop="nickname" label="用户昵称" width="">
-                </el-table-column>
-                <el-table-column prop="customAmount" label="自身收益" width="">
-                </el-table-column>
-                <el-table-column prop="createtime" show-overflow-tooltip label="订单时间" width="">
+                <!-- 操作 -->
+                <el-table-column prop="" label="操作" width="140">
+                  <template slot-scope="scope">
+                    <el-button @click="makeCodeImg(scope.row)" type="text" size="small">生成二维码</el-button>
+                  </template>
                 </el-table-column>
 
             </el-table>
@@ -87,6 +66,55 @@
                 </el-pagination>
             </div>
         </div>
+         <!-- M3 dialog 新增-->
+        <el-dialog
+            title="新增业务人员"
+            :visible.sync="add_dialog"
+            width="30%"
+            center
+            class="valid_form"
+            v-loading="add_loading"
+            element-loading-text="拼命加载中"
+            element-loading-spinner="el-icon-loading"
+            element-loading-background="rgba(0, 0, 0, 0.8)"
+            >
+            <!-- body -->
+            <div class="wid_b75">
+                <el-form  :model="add_formInline" :rules="rules" ref="add_formInline" label-width="50px"  class="demo-ruleForm">
+                    <el-form-item label="姓名" prop="user_name">
+                        <el-input v-model="add_formInline.user_name" placeholder="请输入姓名"></el-input>
+                    </el-form-item>
+                    <el-form-item label="电话" prop="phone">
+                        <el-input v-model="add_formInline.phone"  placeholder="请输入电话"></el-input>
+                    </el-form-item>
+                </el-form>
+            </div>
+             <!-- footer  -->
+            <span slot="footer" class="dialog-footer">
+            <el-button @click="add_dialog = false" size='mini'>取 消</el-button>
+            <el-button type="primary" @click="save_add" size='mini'>确 定</el-button>
+            </span>
+        </el-dialog>
+        <!-- M4 dialog 二维码 -->
+        <el-dialog
+          title="二维码"
+          :visible.sync="view_dialog"
+          width="30%"
+          center
+          v-loading="view_loading"
+          element-loading-text="拼命加载中"
+          element-loading-spinner="el-icon-loading"
+          element-loading-background="rgba(0, 0, 0, 0.8)"
+          class="erCode"
+          >
+
+          <img width="218px"  :src="viewImageUrl" alt="">
+
+          <!-- footer -->
+          <span slot="footer" class="dialog-footer">
+            <el-button @click="view_dialog = false" size='mini'>取 消</el-button>
+          </span>
+        </el-dialog>
     </div>
 </template>
 <script>
@@ -95,48 +123,86 @@ import commonUrl from '../../utils/common';
 export default {
     name: 'virtualProfit',
     data(){
+        // 手机号验证
+        let validMobile=(rule,value,callback)=>{
+            if(value==''||value==undefined){
+                callback()
+            }else{
+                let reg=/^1[3|4|5|7|8][0-9]\d{8}$/
+                if(!reg.test(value)){callback(new Error('请输入正确手机号'))}else{
+                    callback()
+                }
+            }
+        };
         return {
 
             //name:localStorage.getItem('pp_real_name'),
-            customid:localStorage.getItem('pp_userId'),
+            userId:localStorage.getItem('pp_userId'),
             // 主列表
             tableLoading:false,
             tableData:[],
             // 分页
-            pageTotal: 100,
+            pageTotal: 1,
             currentPage:1,
             // 查询参数
             queryForm: {
-                virtual_classs:[
-                    {
-                        id:1,
-                        value:'礼物'
-                    },
-                    {
-                        id:2,
-                        value:'红包'
-                    }
-                ],
-                // 收益类型
-                virtual_class:'',
-
-                // 用户ID
-                virtualSourceCustomid:'',
-                // 用户昵称
-                nickName:'',
-
-                // 所有时间
-                allTime:'',
-                // 结束时间
-                endTime:'',
-                // 开始时间
-                startTime:'',
-
+              // 客户类型 1 客户 2 业务员
+              user_types:[
+                  {
+                      id:'1',
+                      value:'客户'
+                  },
+                  {
+                      id:'2',
+                      value:'业务员'
+                  }
+              ],
+              // 客户类型 1客户2业务
+              user_type:'2',
+              // 用户名
+              user_name:'',
+              // 手机号
+              phone:'',
+              up_userid:''
             },
+            // 弹框
+            add_loading:false,
+            add_dialog: false,
+            // 新增数据
+            add_formInline: {
+              user_name: '',
+              phone: '',
+              up_userid:'',
+              // 1扫码 2直接手动填写
+              type:'2',
+              //user_type 1为用户2位业务员(因为后台共用一个表)
+              user_type:'2'
+            },
+            rules: {
+                user_name: [
+
+                    { required: true, message:'请输入姓名', trigger: 'blur' }
+                ],
+                phone: [
+                    { required: true, validator: validMobile, trigger: 'blur' }
+                ],
+                // email: [
+                //     { required: true, message:'请输入邮箱', trigger: 'blur' }
+                // ],
+                // region: [
+                //     { required: true, message:'请选择业务区域', trigger: 'change' }
+                // ]
+            },
+            //生成二维码
+            view_dialog:false,
+            view_loading:false,
+            viewImageUrl:'',
         }
     },
     created(){
-
+        // 保存admin_id
+        this.queryForm.up_userid = localStorage.getItem('pp_userId')
+        this.add_formInline.up_userid = localStorage.getItem('pp_userId')
         // 初始化主列表
         this.getTabelDataList(1)
     },
@@ -146,41 +212,108 @@ export default {
             // 参数
             let param = {
                 data: {
-                    // 公有
-                    customid: this.customid,
-                    pageNum: pageNum,
-                    pageSize: 10,
+                    // // 公有
+                    // customid: this.customid,
+                    page_count: 10,
+                    page_num: pageNum,
                     // 私有
-                    // 收益类型
-                    virtual_class:this.queryForm.virtual_class,
-
-                    // 用户昵称
-                    nickName:this.queryForm.nickName,
-                    // 用户ID
-                    virtualSourceCustomid:this.queryForm.virtualSourceCustomid,
-
-                    // 出行开始时间
-                    startTime:this.queryForm.startTime,
-                    // 出行结束时间
-                    endTime:this.queryForm.endTime,
-
+                    user_type:this.queryForm.user_type,
+                    user_name:this.queryForm.user_name,
+                    phone:this.queryForm.phone,
+                    up_userid:this.queryForm.up_userid
                 }
             }
             this.tableLoading = true
-            this.$http.post(`${ commonUrl.baseUrl }/virtualProfit/selectVirtualProfit`, param).then(res=>{
-
+            this.$http.post(`${ commonUrl.baseUrl }/api/register/selectSysUserInfo`, param).then(res=>{
                 if(res.data.code == '0000'){
-
-                    console.log(res)
-                    debugger
-
-                    this.tableData =  res.data.data.virtualProfitList
+                    this.tableData =  res.data.data.sysUserInfos
                     // 分页 总数
-                    this.pageTotal = res.data.data.page.pageTotal;
+                    this.pageTotal = res.data.page.page_total;
                     // 关闭加载
                     this.tableLoading = false
                 }
             }).catch(err=>{})
+        },
+        // 生成二维码--操作操作
+        makeCodeImg(row){
+
+          let param = {
+            data:{
+
+              userId:row.user_id
+            }
+          }
+          this.view_dialog = true
+          this.view_loading = true
+          this.$http.post(`${ commonUrl.baseUrl }/api/register/getQRCode`, param,{responseType: "arraybuffer"}).then(response=>{
+              // console.log(res)
+              // if(res.data.code == '0000'){
+
+              //     console.log(res)
+              //     debugger
+
+              //     this.tableData =  res.data.data.sysUserInfos
+              //     // 分页 总数
+              //     //this.pageTotal = res.data.data.page.pageTotal;
+              //     // 关闭加载
+              //     this.view_loading = false
+              // }
+              console.log(new Uint8Array(response.data))
+              //将从后台获取的图片流进行转换
+              return 'data:image/png;base64,' + btoa(
+                new Uint8Array(response.data).reduce((data, byte) => data + String.fromCharCode(byte), '')
+              );
+
+          }).then(res=>{
+            this.viewImageUrl = res
+            this.view_loading = false
+            }).catch(err=>{})
+        },
+        // 新增业务人员---操作
+        handle_add(){
+            this.add_dialog = true
+            // 清空 数据
+            this.resetData('add_formInline')
+            // this.clear_formData();
+        },
+        // 保存 新增
+        save_add(){
+            // 验证
+            if(this.valid_form('add_formInline')){
+              // 参数
+              let param = {
+                  data: {
+                      // 公有
+                      // signInUserId: this.$store.getters.userId,
+                      // signInRoleId: this.$store.getters.roleId,
+                      // 私有
+                      phone:this.add_formInline.phone,
+                      user_name:this.add_formInline.user_name,
+                      up_userid:this.add_formInline.up_userid,
+                      // 1扫码 2直接手动填写则是业务人员
+                      type:this.add_formInline.type,
+                      //user_type 1用户2:业务员(因为后台共用一个表)
+                      user_type:this.add_formInline.user_type
+
+                  }
+              }
+              this.add_loading = true
+              this.$http.post(`${ commonUrl.baseUrl }/api/register/addUserInfo`, param).then(res=>{
+                  if(res.data.code == '0000'){
+                      console.log(res)
+
+                      this.add_loading = false
+                      // 关闭弹框
+                      this.add_dialog = false
+                      // 提示 新增成功
+                      this.m_message(res.data.msg, 'success')
+                      // 加载数据列表
+                      this.getTabelDataList(1)
+                  }
+              }).catch(err=>{
+
+              })
+            }
         },
         // 刷新
         handle_refresh(){
@@ -189,25 +322,16 @@ export default {
         },
         // 查询按钮
         queryData(){
-
-            if(this.queryForm.allTime.length > 0){
-                // 修正 开始 和结束 时间
-                this.queryForm.startTime = this.queryForm.allTime[0]
-                this.queryForm.endTime = this.queryForm.allTime[1]
-            }
-
-            this.getTabelDataList(1);
+          this.getTabelDataList(1);
         },
         // 重置按钮
         resetData(formName){
             this.$refs[formName].resetFields();
-            // 对于queryForm 下拉
-            this.queryForm.startTime = ''
-            this.queryForm.endTime = ''
+
         },
         // 分页
         handleCurrentChange(val){
-             this.currentPage = val
+            this.currentPage = val
             // 获取单前页数据列表
             this.getTabelDataList(val);
             //console.log(`当前页: ${val}`);
@@ -219,7 +343,25 @@ export default {
                 type
             })
         },
-
+         // 校验规则
+        valid_form(formName) {
+            let  flag  = false ;
+            this.$refs[formName].validate((valid) => {
+                if (valid) {
+                flag = true;
+                return true
+                } else {
+                flag = false;
+                return false;
+                }
+            });
+            return flag;
+        },
     }
 }
 </script>
+<style >
+  .erCode .el-dialog__body{
+    text-align:center;
+  }
+</style>

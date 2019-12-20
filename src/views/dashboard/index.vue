@@ -1,6 +1,6 @@
 <template>
   <div class="dashboard-container">
-    <p class="title" style="margin-top:10%;">
+    <!-- <p class="title" style="margin-top:10%;">
       <span>{{name}}</span>，
       欢迎登陆角落里向导系统，您的ID为
       <span>{{customid}}</span>
@@ -17,7 +17,7 @@
     <p class="title t_profit">
       <span>关注人数：</span>
       {{countFocus}} 人
-    </p>
+    </p> -->
   </div>
 </template>
 
@@ -44,7 +44,7 @@ export default {
     //console.log(this.name)
     //console.log(this.customid);
     // 初始化数据
-    this.getData();
+    //this.getData();
   },
   computed: {
     ...mapGetters(["roles"])

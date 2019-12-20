@@ -19,7 +19,7 @@ const service = axios.create({
 service.interceptors.request.use(
   config => {
 
-    config.headers['Authorization'] = getToken()
+    //config.headers['Authorization'] = getToken()
     // }
     return config
   },
@@ -36,8 +36,8 @@ service.interceptors.response.use(
     if (response.data.code === '0000') {
 
       const authorization = 'jiade'; //response.config.headers.Authorization || response.headers.authorization ; // ''
-      console.log(authorization)
-      debugger
+      //console.log(authorization)
+      //debugger
       store.commit('user/SET_TOKEN', authorization) //请求用户信息
       setToken(authorization) // 存到cookie里面
       return response

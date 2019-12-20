@@ -6,8 +6,8 @@ const state = {
   name: '',
   avatar: '',
   roles: [],
-  roleId: localStorage.getItem('pp_roleId') ? JSON.parse(localStorage.getItem('pp_roleId')) : '',  // 查询列表时 所需字段 signInRoleId
-  userId: localStorage.getItem('pp_userId') ? JSON.parse(localStorage.getItem('pp_userId')) : '',        // 每个接口都需要signInUserId
+  roleId: localStorage.getItem('pp_roleId') ? localStorage.getItem('pp_roleId') : '',  // 查询列表时 所需字段 signInRoleId
+  userId: localStorage.getItem('pp_userId') ? localStorage.getItem('pp_userId') : '',        // 每个接口都需要signInUserId
   real_name:localStorage.getItem('pp_real_name') ? localStorage.getItem('pp_real_name') : '', // 导航栏需要名称
   merchant_center_code:localStorage.getItem('pp_merchant_center_code') ? JSON.parse(localStorage.getItem('pp_merchant_center_code')) : '',   //招商中心需要 merchant_center_code
 }

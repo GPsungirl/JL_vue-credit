@@ -23,9 +23,9 @@
             <span style="display:block;" @click="logout">退出</span>
           </el-dropdown-item>
           <!-- 修改密码 -->
-          <el-dropdown-item divided>
+          <!-- <el-dropdown-item divided>
             <span @click="modi_password" style="display:block;" >修改密码</span>
-          </el-dropdown-item>
+          </el-dropdown-item> -->
         </el-dropdown-menu>
       </el-dropdown>
     </div>
@@ -148,7 +148,7 @@ export default {
             if(res.data.code == '0000'){
               // console.log(res)
 
-              
+
               // debugger
               this.modi_loading = false
               this.m_message(res.data.msg, 'success')

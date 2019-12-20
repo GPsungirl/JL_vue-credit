@@ -13,63 +13,76 @@ export const constantRoutes = [
     component: () => import('@/views/404'),
     hidden: true
   },
+  // {
+  //   path: '/',
+  //   component: Layout,
+  //   redirect: '/dashboard',
+  //   children: [{
+  //     path: 'dashboard',
+  //     name: 'Dashboard',
+  //     component: () => import('@/views/dashboard/index'),
+  //     meta: { title: '首页', icon: 'dashboard' }
+  //   }]
+  // },
   {
     path: '/',
     component: Layout,
-    redirect: '/dashboard',
+    redirect: '/virtualProfit',
     children: [{
-      path: 'dashboard',
-      name: 'Dashboard',
-      component: () => import('@/views/dashboard/index'),
-      meta: { title: '首页', icon: 'dashboard' }
+      path: 'virtualProfit',
+      name: 'virtualProfit',
+      component: () => import('@/views/virtualProfit/virtualProfit'),
+      meta: { title: '业务人员', icon: 'finance' }
     }]
-  }
+  },
+
 ]
 export const asyncRoutes = [
-  // 收益查询
-  {
-    path:'/finance',
-    component: Layout,
-    meta:{ icon:'finance', title:'收益查询' },
-    children:[
-      {
-        component:() => import('@/views/virtualProfit/virtualProfit'),
-        meta:{title:'贝壳收益' },
-        name:'virtualProfit',
-        path:'virtualProfit'
-      },
-      {
-        component:() => import('@/views/accountProfit/accountProfit'),
-        meta:{title:'出行收益'},
-        name:'accountProfit',
-        path:'accountProfit'
-      }
-    ],
-  },
-  // 下属管理
+  // 职员管理
+  // {
+  //   path:'/finance',
+  //   component: Layout,
+  //   meta:{ icon:'finance', title:'职员管理' },
+  //   children:[
+  //     {
+  //       component:() => import('@/views/virtualProfit/virtualProfit'),
+  //       meta:{title:'业务人员' },
+  //       name:'virtualProfit',
+  //       path:'virtualProfit'
+  //     },
+  //     // {
+  //     //   component:() => import('@/views/accountProfit/accountProfit'),
+  //     //   meta:{title:'出行收益'},
+  //     //   name:'accountProfit',
+  //     //   path:'accountProfit'
+  //     // },
+
+  //   ],
+  // },
+  // 客户管理
   {
     path:'/region',
     component: Layout,
-    meta:{icon:'region',title:'下属管理'},
+    meta:{icon:'region',title:'客户管理'},
     children:[
       {
         component:()=>import('@/views/subTravelerInfo/subTravelerInfo'),
-        meta:{ title:'下属向导查询'},
+        meta:{ title:'客户人员'},
         name:'subTravelerInfo',
         path:'subTravelerInfo'
       },
-      {
-        component:() => import('@/views/subVirtualProfit/subVirtualProfit'),
-        meta:{ title:'下属贝壳收益' },
-        name:'subVirtualProfit',
-        path:'subVirtualProfit'
-      },
-      {
-        component:() => import('@/views/subAccountProfit/subAccountProfit'),
-        meta:{title:'下属出行收益' },
-        name:'subAccountProfit',
-        path:'subAccountProfit'
-      }
+      // {
+      //   component:() => import('@/views/subVirtualProfit/subVirtualProfit'),
+      //   meta:{ title:'下属贝壳收益' },
+      //   name:'subVirtualProfit',
+      //   path:'subVirtualProfit'
+      // },
+      // {
+      //   component:() => import('@/views/subAccountProfit/subAccountProfit'),
+      //   meta:{title:'下属出行收益' },
+      //   name:'subAccountProfit',
+      //   path:'subAccountProfit'
+      // }
     ],
   },
   // 404 一定要放在最后

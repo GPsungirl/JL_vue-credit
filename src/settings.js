@@ -1,6 +1,6 @@
 module.exports = {
 
-  title: '向导管理平台',
+  title: '信用卡管理平台',
 
   /**
    * @type {boolean} true | false
