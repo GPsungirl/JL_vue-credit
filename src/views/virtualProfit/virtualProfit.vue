@@ -246,18 +246,7 @@ export default {
           this.view_dialog = true
           this.view_loading = true
           this.$http.post(`${ commonUrl.baseUrl }/api/register/getQRCode`, param,{responseType: "arraybuffer"}).then(response=>{
-              // console.log(res)
-              // if(res.data.code == '0000'){
-
-              //     console.log(res)
-              //     debugger
-
-              //     this.tableData =  res.data.data.sysUserInfos
-              //     // 分页 总数
-              //     //this.pageTotal = res.data.data.page.pageTotal;
-              //     // 关闭加载
-              //     this.view_loading = false
-              // }
+              
               console.log(new Uint8Array(response.data))
               //将从后台获取的图片流进行转换
               return 'data:image/png;base64,' + btoa(
@@ -326,8 +315,9 @@ export default {
         },
         // 重置按钮
         resetData(formName){
-            this.$refs[formName].resetFields();
-
+          if(this.$refs[formName]){
+              this.$refs[formName].resetFields();
+          }
         },
         // 分页
         handleCurrentChange(val){
