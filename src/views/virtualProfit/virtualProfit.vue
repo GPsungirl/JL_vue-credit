@@ -66,7 +66,7 @@
                 </el-pagination>
             </div>
         </div>
-         <!-- M3 dialog 新增-->
+        <!-- M3 dialog 新增-->
         <el-dialog
             title="新增业务人员"
             :visible.sync="add_dialog"
@@ -246,7 +246,7 @@ export default {
           this.view_dialog = true
           this.view_loading = true
           this.$http.post(`${ commonUrl.baseUrl }/api/register/getQRCode`, param,{responseType: "arraybuffer"}).then(response=>{
-              
+
               console.log(new Uint8Array(response.data))
               //将从后台获取的图片流进行转换
               return 'data:image/png;base64,' + btoa(
